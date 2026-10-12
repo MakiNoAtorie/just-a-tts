@@ -1,0 +1,12 @@
+[project]
+name = "localtts"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "audiotsm>=0.1.2",
+    "mlx-audio>=0.5.8",
+    "pyobjc-framework-quartz>=12.2.2",
+    "rumps>=0.4.0",
+    "sounddevice>=0.5.6",
+    "trafilatura>=2.3.1",
+]
