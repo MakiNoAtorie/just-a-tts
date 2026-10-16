@@ -11,6 +11,7 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$RES"
 [ -f icon.icns ] || .venv/bin/python make_icon.py
 cp tts_daemon.py icon.icns "$RES/"
+cp -R core mac "$RES/"
 uv venv -q --relocatable --python 3.13 "$RES/venv"
 UV_PROJECT_ENVIRONMENT="$RES/venv" uv sync -q --frozen
 

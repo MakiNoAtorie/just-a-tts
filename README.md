@@ -36,7 +36,9 @@ Then, once:
 
 ## Files
 
-- `tts_daemon.py`: the whole app (text extraction, model, player, HTTP server on 127.0.0.1:8765, windows).
+- `tts_daemon.py`: starts the macOS app and holds the self-check.
+- `core/`: the platform-free parts. `text.py` (passages, language), `pdf.py` (PDF line rules), `extract.py` (web pages and files), `engine.py` (settings, models, generation, playback), `server.py` (HTTP API on 127.0.0.1:8765).
+- `mac/`: `app.py` (menu bar, windows, Dock), `pdf.py` (PDFKit lines, Vision OCR), `voice.py` (MLX).
 - `extension/`: Chrome extension, a thin client of the HTTP server.
 - `install_services.py`, `build_app.sh`, `make_icon.py`: installers.
 - `todo.md`: what is done and what is left. `REVIEW_REPORT.md`: the review most of it came from.

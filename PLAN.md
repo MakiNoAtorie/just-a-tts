@@ -32,7 +32,7 @@ Written 2026-10-16. Chosen direction: **a full Windows app** for the PC with the
 | `mac/` | rumps menu bar, AppKit windows, PDFKit line extraction, Vision OCR, Services, `build_app.sh` | macOS |
 | `win/` | Tray icon, window, PDF lines, OCR, packaging | Windows |
 
-Done when `test_pdf.py` passes and the Mac app behaves exactly as before.
+Done when `test_pdf.py` passes and the Mac app behaves exactly as before. **Done 2026-10-16:** self-check and `test_pdf.py` pass, PDF text is identical to before on two real PDFs, and the app reads through the HTTP API. The engine takes the voice backend by module name (`mac.voice` here; a CUDA one on Windows), and the platform hooks are `engine.notify`, `extract.pdf_text` and `extract.rich_text`.
 
 ### 1.2 Windows pieces
 

@@ -2,7 +2,9 @@
 import AppKit
 import Quartz
 
-from tts_daemon import pdf_text, pieces, unligature
+from core.pdf import unligature
+from core.text import pieces
+from mac.pdf import pdf_text
 
 WORDS = "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore".split()
 

@@ -56,7 +56,7 @@ Codes in brackets are the items of `REVIEW_REPORT.md`.
 - [ ] Menu bar only, SF Symbols icons [D1, D2]; global hotkeys and media keys [D15, A10]; launch at login [D14]; first-run download progress [D13]
 - [ ] Export to an audio file [A11]
 - [ ] Bundle Python in the app; compiled launcher and signing [P1, P3]
-- [ ] Split `tts_daemon.py` into modules [10]
+- [x] Split `tts_daemon.py` into `core/` and `mac/` [10]
 
 ## Known ceilings — fix only when they annoy
 
