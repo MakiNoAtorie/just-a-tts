@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
   "name": "LocalTTS – Read Aloud",
-  "version": "3.0",
+  "version": "3.2",
   "description": "Right-click a page or a selection, or press Control+Option+R, to have LocalTTS read it, with controls and highlighting on the page.",
+  "icons": { "128": "icon.png" },
   "permissions": ["contextMenus", "scripting", "activeTab"],
-  "host_permissions": ["http://127.0.0.1:8765/*"],
+  "host_permissions": ["http://127.0.0.1:8765/*", "<all_urls>"],
   "background": { "service_worker": "background.js" },
   "action": { "default_title": "Read aloud (selection, or the whole page)" },
   "content_scripts": [{ "matches": ["<all_urls>"], "js": ["content.js"], "run_at": "document_idle" }]

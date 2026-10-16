@@ -1,7 +1,8 @@
-"""Writes the Quick Actions into ~/Library/Services. Rerun after editing; then run pbs -update."""
-import os, plistlib, uuid
+"""Writes the Quick Actions into ~/Library/Services and tells macOS to pick them up. Rerun after editing."""
+import os, plistlib, subprocess, uuid
 U = "http://127.0.0.1:8765"
 # send PATH BODY: posts to LocalTTS, starting it quietly first if it is not running.
+NOTE = """osascript -e 'display notification "%s" with title "LocalTTS"'"""
 SEND = f"""send() {{
   printf %s "$2" | curl -sf -o /dev/null --data-binary @- "{U}$1" && return
   open -ga LocalTTS --args --background
@@ -9,6 +10,7 @@ SEND = f"""send() {{
     sleep 0.5
     printf %s "$2" | curl -sf -o /dev/null --data-binary @- "{U}$1" && return
   done
+  {NOTE % "LocalTTS did not start. Open it from Applications and try again."}
 }}
 """
 # Tries the rendered HTML first (works behind a login, needs "Allow JavaScript from Apple Events"
@@ -25,6 +27,7 @@ case "$app" in
 esac
 if [ ${#html} -gt 200 ]; then send /html "$html"
 elif [ -n "$url" ]; then send /page "$url"
+else """ + NOTE % "This app did not hand over its page. Select the text and use Read Aloud." + """
 fi"""
 SERVICES = [
     ("Read Aloud", True, SEND + 'send /speak "$(cat)"'),
@@ -69,3 +72,4 @@ for name, text_in, cmd in SERVICES:
         },
     }, open(f"{d}/document.wflow", "wb"))
     print("wrote", d)
+subprocess.run(["/System/Library/CoreServices/pbs", "-update"])

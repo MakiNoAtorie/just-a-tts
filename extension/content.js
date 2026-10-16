@@ -118,6 +118,9 @@
     }
     if (read === null) return;
     if (!state) return (show("LocalTTS stopped.", true), clearInterval(timer));
+    if (state.read === read && state.status === "idle" && state.error) {
+      return (show(state.error, true), clearInterval(timer)); // the read failed: say why instead of vanishing
+    }
     if (state.read !== read || state.status === "idle") return close();
     if (state.passages) {
       passages = state.passages;
@@ -161,13 +164,14 @@
     close();
   };
 
-  // Reads the selection if there is one (unless wholePage), otherwise the page. False if this page cannot be read here.
-  function readHere(wholePage = false) {
+  // Starts the read the background script worked out (it can see into embedded frames); without one, reads this
+  // page's selection, or else this page. False if this page cannot be read here.
+  function readHere(request) {
     if (document.contentType === "application/pdf") return false; // the background script handles PDFs
-    const selection = wholePage ? "" : getSelection().toString().trim();
+    const selection = getSelection().toString().trim();
     show("Starting…");
     // The rendered HTML rather than the address, so pages behind a login work.
-    send("read", selection ? ["/speak", selection] : ["/html", document.documentElement.outerHTML]).then(
+    send("read", request ?? (selection ? ["/speak", selection] : ["/html", document.documentElement.outerHTML])).then(
       (reply) => {
         if (reply) begin(reply.read);
         else show("LocalTTS isn’t running. Open it from Applications, then try again.", true);
@@ -178,7 +182,7 @@
   }
 
   chrome.runtime.onMessage.addListener((message, _sender, reply) => {
-    if (message.trigger) reply(readHere());
+    if (message.trigger) reply(readHere(message.request));
   });
 
   // The same keys as the macOS Services shortcuts, handled here so they work reliably in Chrome.
@@ -187,7 +191,7 @@
     "keydown",
     (event) => {
       if (!event.ctrlKey || !event.altKey || event.metaKey) return;
-      if (event.code === "KeyR") readHere(event.shiftKey);
+      if (event.code === "KeyR") send("trigger", event.shiftKey); // with Shift: the whole page
       else if (event.shiftKey) return;
       else if (event.code === "KeyP") send("pause").then(poll);
       else if (event.code === "Period") send("stop");
